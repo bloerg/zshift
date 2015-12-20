@@ -40,7 +40,7 @@
               <div class="form-group">
                 <input type="file" name="file" style="display:none;" id="input-file" />
                 <span class="input-append">
-                    <input type="text" name="fits-file-name" id="fits-file-name-input" class="form-control">
+                    <span id="input-file_name" class="label label-default"></span>
                     <a class="btn btn-primary" onclick="$('#input-file').click();">open fits file</a>
                 </span>
               </div>
@@ -346,10 +346,8 @@ $(function() {
         //get index number of redshift
         var i=0;
         var z_byte_offset = 0; 
-        console.log(hdu.data);
         while (hdu.data.columns[i] != "Z" && i < hdu.data.columns.length) {
             z_byte_offset = z_byte_offset + hdu.data.elementByteLengths[i];
-            console.log(z_byte_offset);
             i= i +1;
         }
         var dataview = new DataView(hdu.data.buffer, 0); 
@@ -407,7 +405,7 @@ $(function() {
 
     // for loading fits files from local storage
     $("#input-file").change(function() {
-        //~ console.log(this.files);
+        $("#input-file_name").text(this.files[0].name);
         open_fits_file(this.files[0]);
     });
     
