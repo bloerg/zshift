@@ -363,8 +363,8 @@ $(function() {
 
       // inject an image with the src url
       reader.onload = function(event) {
-        local_url = event.target.result
-        var fits = new FITS(local_url, plot_fits, "astring");
+        file_content = event.target.result;
+        var fits = new FITS(file_content, plot_fits);
       }
      
       // when the file is read it triggers the onload event above.
