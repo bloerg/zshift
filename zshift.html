@@ -357,18 +357,17 @@ $(function() {
 
 
     function open_fits_file(file) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+          data_url = event.target.result;
+        var fits = new FITS(data_url, plot_fits);
+        }
+        if (file.type.match('image/fits')) {
+            reader.readAsDataURL(file);
+        } else {
+            alert('This does not seem to be a fits file. I won\'t plot it.');
+        }     
 
-      // generate a new FileReader object
-      var reader = new FileReader();
-
-      // inject an image with the src url
-      reader.onload = function(event) {
-        file_content = event.target.result;
-        var fits = new FITS(file_content, plot_fits);
-      }
-     
-      // when the file is read it triggers the onload event above.
-      reader.readAsDataURL(file);
     }
 
 
