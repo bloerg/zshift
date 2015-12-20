@@ -9,27 +9,11 @@
     <script src="./fits.js" type="text/javascript" charset="utf-8"></script>
     <script src="./jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="./jquery-ui/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="./jquery.flot.js" type="text/javascript" charset="utf-8"></script>
     <script src="./bootstrap/js/bootstrap.min.js"></script>
     <script src="./dygraph-combined.js"></script>
-<!--
-    <script src="./markedLines.js"></script>
--->
-    
     <link rel="stylesheet" href="./jquery-ui/jquery-ui.min.css">
     <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="./bootstrap/css/bootstrap-theme.min.css">
-
-
-<!--
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-
-
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
-
-
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
--->
 
 </head>
 <body>
@@ -48,9 +32,19 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
             <li><a href="#about">About</a></li>
-            <li><a href="mailto:dev@bloerg.de">Contact</a></li>
+            <li><a href="mailto:dev@aspect-ui.de">Contact</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <form class="navbar-form navbar-left" role="search">
+              <div class="form-group">
+                <input type="file" name="file" style="display:none;" id="input-file" />
+                <span class="input-append">
+                    <input type="text" name="fits-file-name" id="fits-file-name-input" class="form-control">
+                    <a class="btn btn-primary" onclick="$('#input-file').click();">open fits file</a>
+                </span>
+              </div>
+            </form>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -61,26 +55,13 @@
 
 
     <div class="container-fluid">
-        <div class="row-fluid">
+        <div class="row">
           <div class="col-md-10 col-md-offset-1">
 
 
             <div style="width:100%;height:500px;text-align:left;margin:10px auto;" id="spectrum"></div>
 
             
-             <div class="row-fluid" style="display:none">
-                    <div class="span12">
-                        <p class="text-center">Press and hold SHIFT key to pan right, left, up, or down. <button class="btn" type="button" onclick="unzoomGraph(window.g);">Unzoom</button></p>
-                        <p class="text-center">
-                            <label class="checkbox inline"><input type="checkbox" id="best_fit" onclick="change(this,window.g);" checked="checked" />Best Fit</label>
-                            <label class="checkbox inline"><input type="checkbox" id="sky_flux" onclick="change(this,window.g);" />Sky Flux</label>
-                            <label class="checkbox inline"><input type="checkbox" id="emissLines" onclick="window.g.updateOptions({});" checked="checked" />Mark Emission Lines</label>
-                            <label class="checkbox inline"><input type="checkbox" id="absorpLines" onclick="window.g.updateOptions({});" checked="checked" />Mark Absorption Lines</label>
-                            <label class="checkbox inline"><input type="checkbox" id="stepPlot" onclick="change(this,window.g);" checked="checked" />Plot Flux in Steps</label>
-                        </p>
-                    </div>
-                </div>
-
 <!-- slider -->
             <div class="row-fluid">
                 <div class="col-md-10">
@@ -104,7 +85,11 @@
 <!-- /slider -->
 
         </div>
+        
+        
+        <div class="col-md-1">
 
+        </div>
 <!-- spec lines -->
 <!--
         <div class="col-md-2">
@@ -114,6 +99,32 @@
 <!-- /spec lines -->
 
         </div>
+        
+        <div class="panel panel-default" >
+          <div class="panel-body">
+
+            <div class="row-fluid">
+                <div class="col-md10 col-md-offset-1">
+                    <p id="unzoom_button" class="text-center">Press and hold SHIFT key to pan right, left, up, or down. <button class="btn" type="button">Unzoom</button></p>
+                    <div class="row-fluid">
+                        <div class="col-md-6 col-md-offset-3">
+                        <ul class="list-inline center-block">
+                            <li><label class="checkbox"><input type="checkbox" id="best_fit" checked="checked" />Best Fit</label></li>
+                            <li></li>
+                            <li><label class="checkbox"><input type="checkbox" id="sky_flux" />Sky Flux</label></li>
+                            <li></li>
+                            <li><label class="checkbox"><input type="checkbox" id="emissLines" checked="checked" />Mark Emission Lines</label></li>
+                            <li></li>
+                            <li><label class="checkbox"><input type="checkbox" id="absorpLines" checked="checked" />Mark Absorption Lines</label></li>
+                        </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        
+
     </div> <!-- /container -->
 
 </body>
@@ -123,58 +134,9 @@
 
 $(function() {
     
-    var redshift = {
-        value: 1,
-        set: function() {
-            this.value = $("#red_shift_slider").slider("value") / 100;
-            $("#red_shift_input").val(this.value);
-        },
-        get: function () {
-            return this.value;
-        }
-    }
-    
-    var g = new Dygraph(
-        document.getElementById("spectrum"),
-        "./spectrum.csv",
-        { // Options for Dygraph
-            visibility : [true, true, false],
-            title: 'Plate: 1251, MJD: 52964, Fiber: 0194',
-            xlabel: 'Wavelength [Ångströms]',
-            ylabel: 'Flux [10<sup>-17</sup> erg/cm<sup>2</sup>/s/Å]',
-            stepPlot: true,
-            colors: ['#000000', '#EE1111', "#AE00DB"],
-            underlayCallback: underlaycallback_helper,
-        }
-    );
-    
-    $( "#red_shift_slider" ).slider({
-        create: function() {redshift.set()},
-        orientation: "horizontal",
-        range: false,
-        min: 0,
-        max: 1000,
-        value: 100,
-        slide: function() {
-            //g.updateOptions({underlayCallback: underlaycallback_helper})
-            redshift.set();
-            $("#red_shift_input").val(redshift.get());
-            g.updateOptions({})
-
-        },
-        change: function() {
-            //g.updateOptions({underlayCallback: underlaycallback_helper})
-            redshift.set();
-        }
-    });
-    
-    $("#button_set_redshift").click( function() {
-        $("#red_shift_slider").slider( "option", "value", $("#red_shift_input").val() * 100);
-    });
-    
-    //
-    // This file is used by spectrumDetail.html
-    //
+    // We need the lines variable for plotting absorption/emission lines 
+    // in the background of the spectrum
+    // taken from the sky server: http://dr12.sdss3.org/javascript/markedLines.js
     var lines = [
         //
         // This is the set of emission lines from the spZline files.
@@ -228,31 +190,38 @@ $(function() {
         {"name" : "D1 (Na I 5895)", "lambda" : 5895.92,  "emission" : false },
         {"name" : "Hα",             "lambda" : 6562.801, "emission" : false },
         ];
-    //
-    // Turns spectral lines on and off.
-    //
-    function change(el,g) {
-        if (el.id == "stepPlot") {
-            g.updateOptions( { stepPlot: el.checked } );
-        } else {
-            g.setVisibility(((el.id == "best_fit") ? 1 : 2), el.checked);
+    
+    
+
+    // The graph, loads a spectrum.csv file from the root dir, in order
+    // to have something to plot in the beginning
+    // design inspired by the sky server: http://dr12.sdss3.org/spectrumDetail?plateid=1251&mjd=52964&fiber=194
+    // spectrum.csv is output of "http://dr12.sdss3.org/csvSpectrum?mjd=52964&amp;fiber=194&amp;plateid=1251&amp;reduction2d=26"
+    var g = new Dygraph(
+        document.getElementById("spectrum"),
+        "./spectrum.csv",
+        {   visibility :[true, $("#best_fit").prop( "checked" ), $("#sky_flux").prop( "checked" )],
+            title: 'Plate: 1251, MJD: 52964, Fiber: 0194',
+            xlabel: 'Wavelength [Ångströms]',
+            ylabel: 'Flux [10<sup>-17</sup> erg/cm<sup>2</sup>/s/Å]',
+            stepPlot: true,
+            colors: ['#000000', '#EE1111', "#AE00DB"],
+            underlayCallback: underlaycallback
         }
-    }
+    );
+
     //
     // Powers the "Unzoom" button.
     //
+    //copied from the sky server: http://dr12.sdss3.org/javascript/markedLines.js
     function unzoomGraph(g) {
         g.updateOptions({ dateWindow: null, valueRange: null });
     }
-    //
-    // Used to zoom in on emission lines.
-    //
-    function zoomGraphX(minDate, maxDate, g) {
-        g.updateOptions({ dateWindow: [minDate, maxDate] });
-    }
+    
     //
     // Helper function used by underlaycallback.
     //
+    //copied from the sky server: http://dr12.sdss3.org/javascript/markedLines.js
     function getLeftRight(centerWave,g) {
         var center = g.toDomCoords(centerWave, 0);
         return [center[0] - 2, center[0] + 2];
@@ -260,6 +229,7 @@ $(function() {
     //
     // Convert to vacuum wavelength.
     //
+    //copied from the sky server: http://dr12.sdss3.org/javascript/markedLines.js
     function airtovac(lambda) {
         //
         // Don't convert less than 2000.
@@ -273,53 +243,81 @@ $(function() {
         }
         return lambda_vac;
     }
+
     //
     // This function draws the spectra line markers.
     //
-    function underlaycallback(canvas, area, g, redshift) {
-        //var echecked = document.getElementById("emissLines").checked;
-        //var achecked = document.getElementById("absorpLines").checked;
-        echecked = true;
-        achecked = true;
+    // This is different form the sky server implementation
+    // because it draws the lines on another canvas dedicated
+    // to the spec lines
+    function underlaycallback(graph_canvas_context, area, g) {
+        $("#spec_line_canvas")[0].width = g.canvas_.width;
+        $("#spec_line_canvas")[0].height = g.canvas_.height;
+        $("#spec_line_canvas").css({"width": g.canvas_.width, "height": g.canvas_.height});
+        plot_spec_lines();
+    }
+    
+
+
+    // an object for storing and setting/getting of red shift state of the plot
+    var redshift = {
+        value: 1,
+        set: function() {
+            this.value = $("#red_shift_slider").slider("value") / 1000;
+            $("#red_shift_input").val(this.value);
+        },
+        get: function () {
+            return this.value;
+        }
+    }
+    
+    
+    // the function for plotting the spec lins
+    // it is different from the sky server implementation
+    // in that it draws on another canvas
+    // this is for the purpose of not mixing up the drawings
+    // when shifting around the spec lines
+    function plot_spec_lines() {
+        var echecked = $("#emissLines").prop( "checked" );
+        var achecked = $("#absorpLines").prop( "checked" );
         if (echecked || achecked) {
+            var spec_line_canvas = $("#spec_line_canvas")[0];
+            var spec_line_canvas_context = spec_line_canvas.getContext('2d');
+            spec_line_canvas_context.clearRect(0, 0, spec_line_canvas.width, spec_line_canvas.height);
+            var area = g.getArea();
             for (var i = 0; i < lines.length; i++) {
                 if (lines[i].emission && !echecked) continue;
                 if (!lines[i].emission && !achecked) continue;
-                var shiftedWave = airtovac(lines[i].lambda)* redshift.get();
-                var leftright = getLeftRight(shiftedWave,g);
-                canvas.fillStyle = lines[i].emission ? "rgba(0, 38, 220, 0.2)" : "rgba(220, 0, 5, 0.2)";
-                canvas.fillRect(leftright[0], area.y, leftright[1] - leftright[0], area.h);
-                canvas.font = "15px sans-serif";
-                canvas.fillStyle = lines[i].emission ? "rgba(0, 38, 220, 1)" : "rgba(220, 0, 5, 1)";
-                var offset = (i%3)*15 + 20;
-                var texty = lines[i].emission ? area.y + offset : area.y+area.h - offset;
-                canvas.fillText(lines[i].name,leftright[0],texty);
-            }
-        }
-    }
+                var shiftedWave = airtovac(lines[i].lambda)* (redshift.get() +1);
+                if (shiftedWave > 3000 && shiftedWave < 10000) {
+                    var leftright = getLeftRight(shiftedWave,g);
+                    spec_line_canvas_context.fillStyle = lines[i].emission ? "rgba(0, 38, 220, 0.2)" : "rgba(220, 0, 5, 0.2)";
+                    spec_line_canvas_context.fillRect(leftright[0], area.y, leftright[1] - leftright[0], area.h);
+                    spec_line_canvas_context.font = "15px sans-serif";
+                    spec_line_canvas_context.fillStyle = lines[i].emission ? "rgba(0, 38, 220, 1)" : "rgba(220, 0, 5, 1)";
+                    var offset = (i%3)*15 + 20;
+                    var texty = lines[i].emission ? area.y + offset : area.y+area.h - offset;
+                    spec_line_canvas_context.fillText(lines[i].name,leftright[0],texty);
+                    spec_line_canvas_context.clearRect(0, 0, area.x, spec_line_canvas.height);
+                    spec_line_canvas_context.clearRect(area.x+area.w, 0, spec_line_canvas.width, spec_line_canvas.height);
+                };
+            };
+        };
+    };
 
 
-    function underlaycallback_helper(canvas, area, g) {
-        underlaycallback(canvas, area, g, redshift)
-    }
-
-
-    
-    console.log(redshift.get());
-    
+    //fits file related
     var FITS = astro.FITS;
-    
-
-
     var plot_fits = function(fitsobject, arguments) {
-        
         //COEFF0, COEFF1, needed for computation of wavelenghts in older spSpec files
         //see: http://classic.sdss.org/dr3/products/spectra/read_spSpec.html
         var hdu = this.getHDU(0);
-        //console.log("hdu0", hdu);
         var coeff0 = hdu.header.cards.COEFF0.value;
         var coeff1 = hdu.header.cards.COEFF1.value;
-        
+        var fiberid = hdu.header.cards.FIBERID.value;
+        var plateid = hdu.header.cards.PLATEID.value;
+        var mjd = hdu.header.cards.MJD.value;
+
         // Get the dataunit object for spectrum
         // see http://data.sdss3.org/datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/spectra/PLATE4/spec.html
         var dataunit = this.getDataUnit();
@@ -333,43 +331,97 @@ $(function() {
         for (i = 0; i<dataview.byteLength; i+=element_byteLength*8) {
             //console.log("float", i, dataview.getFloat32(i))
             //console.log("int", i, dataview.getInt32(i))
-            spectrum.push([Math.pow(10,dataview.getFloat32(i+wavelength_field * element_byteLength)), dataview.getFloat32(i + spectrum_field * element_byteLength)])
+            spectrum.push([
+                Math.pow(10,dataview.getFloat32(i+wavelength_field * element_byteLength)), 
+                dataview.getFloat32(i + spectrum_field * element_byteLength),
+                dataview.getFloat32(i + 7 * element_byteLength),
+                dataview.getFloat32(i + 6 * element_byteLength)
+            ])
         }
-
-
-        
-        //~ var g = new Dygraph(
-            //~ document.getElementById("spectrum"),
-            //~ spectrum,
-            //~ { // Options for Dygraph
-                //~ visibility : [true, true, false],
-                //~ title: 'Plate: 1251, MJD: 52964, Fiber: 0194',
-                //~ xlabel: 'Wavelength [Ångströms]',
-                //~ ylabel: 'Flux [10<sup>-17</sup> erg/cm<sup>2</sup>/s/Å]',
-                //~ stepPlot: true,
-                //~ colors: ['#000000', '#EE1111', "#AE00DB"],
-                //~ underlayCallback: underlaycallback_helper,
-            //~ }
-        //~ );
+        g.updateOptions({file: spectrum, title: "Plate: " + String(plateid) + ", MJD: " + String(mjd) + ", Fiber: " + String(fiberid)});
 
         
+        //open hdu2
+        var hdu = this.getHDU(2);
+        //get index number of redshift
+        var i=0;
+        var z_byte_offset = 0; 
+        console.log(hdu.data);
+        while (hdu.data.columns[i] != "Z" && i < hdu.data.columns.length) {
+            z_byte_offset = z_byte_offset + hdu.data.elementByteLengths[i];
+            console.log(z_byte_offset);
+            i= i +1;
+        }
+        var dataview = new DataView(hdu.data.buffer, 0); 
+        var fits_file_redshift = dataview.getFloat32(z_byte_offset);
+        $("#red_shift_slider").slider( "option", "value", fits_file_redshift * 1000);
     }   
-    // Set path to FITS file
-    //var url = "./spSpec-53177-1572-467.fit";
-    var url = "./spec-1251-52964-0194.fits";
-    // Initialize a new FITS File object
 
-    var fits = new FITS(url, plot_fits, "astring");
-    console.log(fits);
 
-    //~ console.log(fits);
-    // Alternatively, the FITS object may be initialized using the HTML File API.
-    //var fits = new FITS.File(fileObj, plot_fits);
+    function open_fits_file(file) {
 
+      // generate a new FileReader object
+      var reader = new FileReader();
+
+      // inject an image with the src url
+      reader.onload = function(event) {
+        local_url = event.target.result
+        var fits = new FITS(local_url, plot_fits, "astring");
+      }
+     
+      // when the file is read it triggers the onload event above.
+      reader.readAsDataURL(file);
+    }
+
+
+
+    //user interface
+
+    // add another canvas for spec lines
+    $( "#spectrum > div" ).prepend($( "#spectrum > div > canvas" ).first().clone());
+    $( "#spectrum > div > canvas" ).first().attr("id", "spec_line_canvas");
     
+    // slider for changing redshift
+    $( "#red_shift_slider" ).slider({
+        create: function() {redshift.set()},
+        orientation: "horizontal",
+        range: false,
+        min: -1000,
+        max: 9000,
+        value: 0.004606230650097132*1000,  //initial value for spectrum.csv
+        slide: function() {
+            redshift.set();
+            requestAnimationFrame(plot_spec_lines);
+        },
+        change: function() {
+            redshift.set();
+            plot_spec_lines();
+        }
+    });
+    
+    // for changing the slider when setting the redshift in the redshift
+    // input text field
+    $("#button_set_redshift").click( function() {
+        $("#red_shift_slider").slider( "option", "value", $("#red_shift_input").val() * 1000);
+    });
 
-
-
+    // for loading fits files from local storage
+    $("#input-file").change(function() {
+        //~ console.log(this.files);
+        open_fits_file(this.files[0]);
+    });
+    
+    // triggeres unzoom of the plot area
+    $( "#unzoom_button" ).click(function() { unzoomGraph(g) });
+    // switches on/off the emission line plotting
+    $( "#emissLines").click(function() { g.updateOptions({}) });
+    // switches on/off the absorption line plotting
+    $( "#absorpLines").click(function() { g.updateOptions({}) });
+    // switches on/off the sky flux graph
+    $( "#sky_flux").click(function() { g.updateOptions({visibility : [true, $("#best_fit").prop( "checked" ), $("#sky_flux").prop( "checked" )]}) });
+    // switches on/off the best fit graph
+    $( "#best_fit").click(function() { g.updateOptions({visibility : [true, $("#best_fit").prop( "checked" ), $("#sky_flux").prop( "checked" )]}) });
+    
 });
 
 </script>
