@@ -1,4 +1,4 @@
-<!DOCTYPE html lang="de-DE">
+    <!DOCTYPE html lang="de-DE">
 <html>
 <head>
     <meta charset="utf-8">
@@ -143,6 +143,31 @@ $(function() {
         // See $IDLSPEC2D_DIR/etc/emlines.par
         // Wavelengths are in air for lambda > 2000, vacuum for lambda < 2000.
         //
+        
+        //own
+        {"name": "Ly-∞;", "lambda": 912, "emission": true},
+        {"name": "Ly-δ;", "lambda": 950, "emission": true},
+        {"name": "Ly-γ;", "lambda": 973, "emission": true},
+        {"name": "Ly-β;", "lambda": 1026, "emission": true},
+        {"name": "O VI", "lambda": 1031, "emission": true},
+        {"name": "", "lambda": 1037, "emission": true},
+        {"name": "", "lambda": 1242, "emission": true},
+        {"name": "Si IV", "lambda": 1394, "emission": true},
+        {"name": "", "lambda": 1403, "emission": true},
+        {"name": "O IV]", "lambda": 1406, "emission": true},
+        {"name": "N IV]", "lambda": 1486, "emission": true},
+        {"name": "", "lambda": 1551, "emission": true},
+        {"name": "O III]", "lambda": 1663, "emission": true},
+        {"name": "N III", "lambda": 1750, "emission": true},
+        {"name": "C II]", "lambda": 2324, "emission": true},
+        {"name": "", "lambda": 2804, "emission": true},
+        {"name": "[Ne V]", "lambda": 3427, "emission": true},
+        {"name": "", "lambda": 5008, "emission": true},
+        {"name": "[N I]", "lambda": 5199, "emission": true},
+        {"name": "[O I]", "lambda": 6300, "emission": true},
+        {"name": "[O II]", "lambda": 7325, "emission": true},       
+        
+        //SDSS
         {"name" : "Ly-α",           "lambda" : 1215.67,  "emission" : true },
         {"name" : "N V 1240",       "lambda" : 1240.81,  "emission" : true },
         {"name" : "C IV 1549",      "lambda" : 1549.48,  "emission" : true },
@@ -177,6 +202,45 @@ $(function() {
         //
         // Absorption lines
         //
+        
+        //own
+        {"name": "C III", "lambda": 977, "emission": false},
+        {"name": "N III", "lambda": 989, "emission": false},
+        {"name": "C II", "lambda": 1036, "emission": false},
+        {"name": "Si II", "lambda": 1192, "emission": false},
+        {"name": "Si II", "lambda": 1206, "emission": false},
+        {"name": "Si II", "lambda": 1260, "emission": false},
+        {"name": "Si II", "lambda": 1304, "emission": false},
+        {"name": "C II", "lambda": 1335, "emission": false},
+        {"name": "Al II", "lambda": 1671, "emission": false},
+        {"name": "Al III", "lambda": 1855, "emission": false},
+        {"name": "", "lambda": 1863, "emission": false},
+        {"name": "Fe III", "lambda": 1895, "emission": false},
+        {"name": "", "lambda": 1914, "emission": false},
+        {"name": "", "lambda": 1926, "emission": false},
+        {"name": "Mg I", "lambda": 2026, "emission": false},
+        {"name": "Fe III", "lambda": 2062, "emission": false},
+        {"name": "", "lambda": 2069, "emission": false},
+        {"name": "", "lambda": 2080, "emission": false},
+        {"name": "Fe II", "lambda": 2400, "emission": false},
+        {"name": "Fe II", "lambda": 2600, "emission": false},
+        {"name": "Fe II", "lambda": 2750, "emission": false},
+        {"name": "Mg I", "lambda": 2853, "emission": false},
+        {"name": "Fe II", "lambda": 2880, "emission": false},
+        {"name": "Fe II", "lambda": 2950, "emission": false},
+        {"name": "Fe II", "lambda": 2985, "emission": false},
+        {"name": "Al I", "lambda": 3083, "emission": false},
+        {"name": "O III", "lambda": 3134, "emission": false},
+        {"name": "Fe II", "lambda": 3180, "emission": false},
+        {"name": "Fe II", "lambda": 3200, "emission": false},
+        {"name": "CaII H", "lambda": 3970, "emission": false},
+        {"name": "Ca I", "lambda": 4227, "emission": false},
+        {"name": "He I", "lambda": 4471, "emission": false},
+        {"name": "", "lambda": 5898, "emission": false},
+        {"name": "Ca II", "lambda": 8498, "emission": false},
+        {"name": "", "lambda": 8542, "emission": false},
+        
+        //from SDSS
         {"name" : "Hε",             "lambda" : 3889.049, "emission" : false },
         {"name" : "K (Ca II 3933)", "lambda" : 3933.7,   "emission" : false },
         {"name" : "H (Ca II 3968)", "lambda" : 3968.5,   "emission" : false },
@@ -186,7 +250,7 @@ $(function() {
         {"name" : "Hβ",             "lambda" : 4861.325, "emission" : false },
         {"name" : "Mg I 5175",      "lambda" : 5175.0,   "emission" : false },
         {"name" : "D2 (Na I 5889)", "lambda" : 5889.95,  "emission" : false },
-        //{"name" : "D (Na I doublet)","lambda": 5892.9,   "emission" : false },
+        {"name" : "D (Na I doublet)","lambda": 5892.9,   "emission" : false },
         {"name" : "D1 (Na I 5895)", "lambda" : 5895.92,  "emission" : false },
         {"name" : "Hα",             "lambda" : 6562.801, "emission" : false },
         ];
