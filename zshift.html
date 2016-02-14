@@ -139,6 +139,19 @@
 
 
 $(function() {
+
+    //Function to obtain mjd, plate, fiberid from URL
+    //taken from https://css-tricks.com/snippets/javascript/get-url-variables/
+    function getQueryVariable(variable)
+    {
+           var query = window.location.search.substring(1);
+           var vars = query.split("&");
+           for (var i=0;i<vars.length;i++) {
+                   var pair = vars[i].split("=");
+                   if(pair[0] == variable){return pair[1];}
+           }
+           return(false);
+    }
     
     // We need the lines variable for plotting absorption/emission lines 
     // in the background of the spectrum
@@ -267,11 +280,20 @@ $(function() {
     // to have something to plot in the beginning
     // design inspired by the sky server: http://dr12.sdss3.org/spectrumDetail?plateid=1251&mjd=52964&fiber=194
     // spectrum.csv is output of "http://dr12.sdss3.org/csvSpectrum?mjd=52964&amp;fiber=194&amp;plateid=1251&amp;reduction2d=26"
+    if ( getQueryVariable('mjd') && getQueryVariable('plateid') && getQueryVariable('fiber') ) {
+        var spec_csv_source = './csvSpectrum?mjd=' + getQueryVariable('mjd') + '&amp;fiber=' + getQueryVariable('fiber') + '&amp;plateid=' + getQueryVariable('plateid')
+        var spec_title = 'Plate: ' +getQueryVariable('plateid') +', MJD: ' + getQueryVariable('mjd') +', Fiber: ' + getQueryVariable('fiber')
+    }
+    else  {
+        spec_csv_source = './spectrum.csv'
+        spec_title = 'Plate: 1251, MJD: 52964, Fiber: 0194'
+    }
+
     var g = new Dygraph(
         document.getElementById("spectrum"),
-        "./spectrum.csv",
+        spec_csv_source,
         {   visibility :[true, $("#best_fit").prop( "checked" ), $("#sky_flux").prop( "checked" )],
-            title: 'Plate: 1251, MJD: 52964, Fiber: 0194',
+            title: spec_title,
             xlabel: 'Wavelength [Ångströms]',
             ylabel: 'Flux [10<sup>-17</sup> erg/cm<sup>2</sup>/s/Å]',
             stepPlot: true,
@@ -279,6 +301,7 @@ $(function() {
             underlayCallback: underlaycallback
         }
     );
+
 
     //
     // Powers the "Unzoom" button.
@@ -342,11 +365,11 @@ $(function() {
     }
     
     
-    // the function for plotting the spec lins
-    // it is different from the sky server implementation
-    // in that it draws on another canvas
-    // this is for the purpose of not mixing up the drawings
-    // when shifting around the spec lines
+    // the function for plotting the spec lines
+    // It is different from the sky server implementation
+    // in that it draws on another canvas.
+    // This is for the purpose of not mixing up the drawings
+    // when shifting around the spec lines.
     function plot_spec_lines() {
         var echecked = $("#emissLines").prop( "checked" );
         var achecked = $("#absorpLines").prop( "checked" );
