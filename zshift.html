@@ -282,11 +282,17 @@ $(function() {
     // spectrum.csv is output of "http://dr12.sdss3.org/csvSpectrum?mjd=52964&amp;fiber=194&amp;plateid=1251&amp;reduction2d=26"
     if ( getQueryVariable('mjd') && getQueryVariable('plateid') && getQueryVariable('fiber') ) {
         var spec_csv_source = './csvSpectrum?mjd=' + getQueryVariable('mjd') + '&amp;fiber=' + getQueryVariable('fiber') + '&amp;plateid=' + getQueryVariable('plateid')
-        var spec_title = 'Plate: ' +getQueryVariable('plateid') +', MJD: ' + getQueryVariable('mjd') +', Fiber: ' + getQueryVariable('fiber')
+        var spec_title = 
+            '<a href="http://dr12.sdss3.org/spectrumDetail?mjd="' +getQueryVariable('mjd') + '&fiber=' + getQueryVariable('fiber') + '&plateid=' +
+                getQueryVariable('plateid') + 'target="_blank">' +
+                'Plate: ' +getQueryVariable('plateid') +
+                ', MJD: ' + getQueryVariable('mjd') +
+                ', Fiber: ' + getQueryVariable('fiber') +
+            '</a>'
     }
     else  {
         spec_csv_source = './spectrum.csv'
-        spec_title = 'Plate: 1251, MJD: 52964, Fiber: 0194'
+        spec_title = '<a href="http://dr12.sdss3.org/spectrumDetail?mjd=52964&fiber=194&plateid=1251" target="_blank">Plate: 1251, MJD: 52964, Fiber: 0194</a>'
     }
 
     var g = new Dygraph(
