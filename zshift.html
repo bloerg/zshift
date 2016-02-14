@@ -283,8 +283,8 @@ $(function() {
     if ( getQueryVariable('mjd') && getQueryVariable('plateid') && getQueryVariable('fiber') ) {
         var spec_csv_source = './csvSpectrum?mjd=' + getQueryVariable('mjd') + '&amp;fiber=' + getQueryVariable('fiber') + '&amp;plateid=' + getQueryVariable('plateid')
         var spec_title = 
-            '<a href="http://dr12.sdss3.org/spectrumDetail?mjd="' +getQueryVariable('mjd') + '&fiber=' + getQueryVariable('fiber') + '&plateid=' +
-                getQueryVariable('plateid') + 'target="_blank">' +
+            '<a href="http://dr12.sdss3.org/spectrumDetail?mjd=' +getQueryVariable('mjd') + '&fiber=' + getQueryVariable('fiber') + '&plateid=' +
+                getQueryVariable('plateid') + '" target="_blank">' +
                 'Plate: ' +getQueryVariable('plateid') +
                 ', MJD: ' + getQueryVariable('mjd') +
                 ', Fiber: ' + getQueryVariable('fiber') +
