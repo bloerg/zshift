@@ -280,8 +280,10 @@ $(function() {
     // to have something to plot in the beginning
     // design inspired by the sky server: http://dr12.sdss3.org/spectrumDetail?plateid=1251&mjd=52964&fiber=194
     // spectrum.csv is output of "http://dr12.sdss3.org/csvSpectrum?mjd=52964&amp;fiber=194&amp;plateid=1251&amp;reduction2d=26"
+    // Redshift is obtained by querying http://skyserver.sdss.org/dr12/en/tools/search/x_sql.aspx with the compiled sql_search_query
     if ( getQueryVariable('mjd') && getQueryVariable('plateid') && getQueryVariable('fiber') ) {
         var spec_csv_source = './csvSpectrum?mjd=' + getQueryVariable('mjd') + '&amp;fiber=' + getQueryVariable('fiber') + '&amp;plateid=' + getQueryVariable('plateid')
+        var sql_search_query = 'cmd=SELECT distinct sp.z FROM specObj AS sp WHERE sp.mjd=' + getQueryVariable('mjd') + ' AND sp.fiberID=' + getQueryVariable('fiber') + ' AND sp.plate=' + getQueryVariable('plateid') + '&format=json'
         var spec_title = 
             '<a href="http://dr12.sdss3.org/spectrumDetail?mjd=' +getQueryVariable('mjd') + '&fiber=' + getQueryVariable('fiber') + '&plateid=' +
                 getQueryVariable('plateid') + '" target="_blank">' +
@@ -307,7 +309,6 @@ $(function() {
             underlayCallback: underlaycallback
         }
     );
-
 
     //
     // Powers the "Unzoom" button.
@@ -355,6 +356,17 @@ $(function() {
         $("#spec_line_canvas")[0].height = g.canvas_.height;
         $("#spec_line_canvas").css({"width": g.canvas_.width, "height": g.canvas_.height});
         plot_spec_lines();
+
+        //obtain and set redshift
+        $.get('./sql_sdssdr12', sql_search_query,
+            function(data) {
+                if (data[0] && data[0].Rows && data[0].Rows[0].z) {
+                    $("#red_shift_slider").slider( "option", "value", data[0].Rows[0].z * 1000);
+                }
+                else $("#red_shift_slider").slider( "option", "value", 0 );
+            },
+            "json"
+        );
     }
     
 
