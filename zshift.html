@@ -361,6 +361,7 @@ $(function() {
         $.get('./sql_sdssdr12', sql_search_query,
             function(data) {
                 if (data[0] && data[0].Rows && data[0].Rows[0].z) {
+                    console.log(data[0].Rows[0].z);
                     $("#red_shift_slider").slider( "option", "value", data[0].Rows[0].z * 1000);
                 }
                 else $("#red_shift_slider").slider( "option", "value", 0 );
