@@ -292,6 +292,18 @@ $(function() {
                 ', Fiber: ' + getQueryVariable('fiber') +
             '</a>'
     }
+    //dirty hack to match the variable names of SDSS links for easy parameter pasting to zshift url
+    else if ( getQueryVariable('mjd') && getQueryVariable('plate') && getQueryVariable('fiber') ) {
+        var spec_csv_source = './csvSpectrum?mjd=' + getQueryVariable('mjd') + '&amp;fiber=' + getQueryVariable('fiber') + '&amp;plateid=' + getQueryVariable('plate')
+        var sql_search_query = 'cmd=SELECT distinct sp.z FROM specObj AS sp WHERE sp.mjd=' + getQueryVariable('mjd') + ' AND sp.fiberID=' + getQueryVariable('fiber') + ' AND sp.plate=' + getQueryVariable('plateid') + '&format=json'
+        var spec_title = 
+            '<a href="http://dr12.sdss3.org/spectrumDetail?mjd=' +getQueryVariable('mjd') + '&fiber=' + getQueryVariable('fiber') + '&plateid=' +
+                getQueryVariable('plateid') + '" target="_blank">' +
+                'Plate: ' +getQueryVariable('plateid') +
+                ', MJD: ' + getQueryVariable('mjd') +
+                ', Fiber: ' + getQueryVariable('fiber') +
+            '</a>'
+    }
     else  {
         spec_csv_source = './spectrum.csv'
         spec_title = '<a href="http://dr12.sdss3.org/spectrumDetail?mjd=52964&fiber=194&plateid=1251" target="_blank">Plate: 1251, MJD: 52964, Fiber: 0194</a>'
