@@ -381,7 +381,7 @@ $(function() {
                 },
                 "json"
             );
-    }
+        }
     }
     
 
@@ -484,6 +484,7 @@ $(function() {
 
 
     function open_fits_file(file) {
+        sql_search_query = null;
         var reader = new FileReader();
         reader.onload = function(event) {
           data_url = event.target.result;
