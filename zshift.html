@@ -283,7 +283,7 @@ $(function() {
     // Redshift is obtained by querying http://skyserver.sdss.org/dr12/en/tools/search/x_sql.aspx with the compiled sql_search_query
     if ( getQueryVariable('mjd') && getQueryVariable('plateid') && getQueryVariable('fiber') ) {
         var spec_csv_source = './csvSpectrum?mjd=' + getQueryVariable('mjd') + '&amp;fiber=' + getQueryVariable('fiber') + '&amp;plateid=' + getQueryVariable('plateid')
-        var sql_search_query = 'cmd=SELECT distinct sp.z FROM specObj AS sp WHERE sp.mjd=' + getQueryVariable('mjd') + ' AND sp.fiberID=' + getQueryVariable('fiber') + ' AND sp.plate=' + getQueryVariable('plateid') + '&format=json'
+        var sql_search_query = 'cmd=SELECT distinct sp.z FROM specObj AS sp WHERE sp.mjd=' + getQueryVariable('mjd') + ' AND sp.fiberID=' + getQueryVariable('fiber') + ' AND sp.plate=' + getQueryVariable('plateid') + '&format=json&searchtool=SQL&TaskName=Skyserver.Search.SQL&syntax=NoSyntax&ReturnHtml=false'
         var spec_title = 
             '<a href="http://dr12.sdss3.org/spectrumDetail?mjd=' +getQueryVariable('mjd') + '&fiber=' + getQueryVariable('fiber') + '&plateid=' +
                 getQueryVariable('plateid') + '" target="_blank">' +
@@ -295,7 +295,7 @@ $(function() {
     //dirty hack to match the variable names of SDSS links for easy parameter pasting to zshift url
     else if ( getQueryVariable('mjd') && getQueryVariable('plate') && getQueryVariable('fiber') ) {
         var spec_csv_source = './csvSpectrum?mjd=' + getQueryVariable('mjd') + '&amp;fiber=' + getQueryVariable('fiber') + '&amp;plateid=' + getQueryVariable('plate')
-        var sql_search_query = 'cmd=SELECT distinct sp.z FROM specObj AS sp WHERE sp.mjd=' + getQueryVariable('mjd') + ' AND sp.fiberID=' + getQueryVariable('fiber') + ' AND sp.plate=' + getQueryVariable('plate') + '&format=json'
+        var sql_search_query = 'cmd=SELECT distinct sp.z FROM specObj AS sp WHERE sp.mjd=' + getQueryVariable('mjd') + ' AND sp.fiberID=' + getQueryVariable('fiber') + ' AND sp.plate=' + getQueryVariable('plate') + '&format=json&searchtool=SQL&TaskName=Skyserver.Search.SQL&syntax=NoSyntax&ReturnHtml=false'
         var spec_title = 
             '<a href="http://dr12.sdss3.org/spectrumDetail?mjd=' +getQueryVariable('mjd') + '&fiber=' + getQueryVariable('fiber') + '&plateid=' +
                 getQueryVariable('plateid') + '" target="_blank">' +
