@@ -309,6 +309,7 @@ $(function() {
         spec_csv_source = './spectrum.csv'
         spec_title = '<a href="http://dr12.sdss3.org/spectrumDetail?mjd=52964&fiber=194&plateid=1251" target="_blank">Plate: 1251, MJD: 52964, Fiber: 0194</a>'
     }
+    
 
     var g = new Dygraph(
         document.getElementById("spectrum"),
@@ -372,7 +373,7 @@ $(function() {
 
 
         // obtain redshift form url parameter if present
-        if getQueryVariable('z') {
+        if ( getQueryVariable('z') ) {
             $("#red_shift_slider").slider( "option", "value", getQueryVariable('z') * 1000);
         }
         //obtain and set redshift if spectrum is fetched from sdss sas
