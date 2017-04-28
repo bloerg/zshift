@@ -453,7 +453,6 @@ $(function() {
    //fits file related
     //var plot_fits = function(fitsobject, arguments) {
     function plot_spectrum_from_fits(fitsobject, arguments) {
-                console.log(fitsobject, arguments);
         //COEFF0, COEFF1, needed for computation of wavelenghts in older spSpec files
         //see: http://classic.sdss.org/dr3/products/spectra/read_spSpec.html
         var hdu = fitsobject.getHDU(0);
