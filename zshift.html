@@ -467,20 +467,23 @@ $(function() {
         // see http://data.sdss3.org/datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/spectra/PLATE4/spec.html
         var dataunit = fitsobject.getDataUnit();
         var spec_width=dataunit.rows; 
-        
+
         var dataview = new DataView(dataunit.buffer, 0); //see: http://www.javascripture.com/DataView
         var element_byteLength=4;
-        var spectrum_field = 0;
-        var wavelength_field = 1;
+        var flux_field = 0;
+        var loglam_field = 1;
+	var model_field = 7;
+	var sky_field = 6;
+	var data_columns = dataunit.cols;
         var spectrum=[];
-        for (i = 0; i<dataview.byteLength; i+=element_byteLength*8) {
+        for (i = 0; i<dataview.byteLength; i+=element_byteLength * data_columns) {
             //console.log("float", i, dataview.getFloat32(i))
             //console.log("int", i, dataview.getInt32(i))
             spectrum.push([
-                Math.pow(10,dataview.getFloat32(i+wavelength_field * element_byteLength)), 
-                dataview.getFloat32(i + spectrum_field * element_byteLength),
-                dataview.getFloat32(i + 7 * element_byteLength),
-                dataview.getFloat32(i + 6 * element_byteLength)
+                Math.pow(10,dataview.getFloat32(i+loglam_field * element_byteLength)), 
+                dataview.getFloat32(i + flux_field * element_byteLength),
+                dataview.getFloat32(i + model_field * element_byteLength),
+                dataview.getFloat32(i + sky_field * element_byteLength)
             ])
         }
         g.updateOptions({
